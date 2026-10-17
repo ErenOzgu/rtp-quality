@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  go:
+    name: Go ${{ matrix.go }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ["1.21", "1.23"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go }}
+          cache: false # no third-party dependencies, so no go.sum to cache on
+      - name: gofmt
+        run: test -z "$(gofmt -l .)" || { gofmt -l .; exit 1; }
+      - name: go vet
+        run: go vet ./...
+      - name: go test (race)
+        run: go test ./... -race -count=1
+
+  fuzz:
+    name: Fuzzing (20 s each)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+          cache: false
+      - name: Capture readers (pcap, pcapng, every link layer)
+        run: go test ./internal/capture -run '^$' -fuzz FuzzRead -fuzztime 20s
+      - name: RTP header parser
+        run: go test ./internal/rtp -run '^$' -fuzz FuzzParse -fuzztime 20s
+      - name: Stream analyzer
+        run: go test ./internal/stream -run '^$' -fuzz FuzzAnalyzer -fuzztime 20s
+
+  real-call:
+    name: Real call (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.23"
+          cache: false
+      - name: Install SIPp, tcpdump, tshark, tc
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq sip-tester tcpdump tshark iproute2 python3
+          # netem and its friends are in the "extra" kernel modules on some images
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -qq "linux-modules-extra-$(uname -r)" || true
+          sipp -v | head -1
+          tshark --version | head -1
+      - name: Build
+        run: go build -o rtp-quality ./cmd/rtp-quality
+      - name: Synthetic calls agree with Wireshark
+        run: RQ="$PWD/rtp-quality" hack/annotate.sh bash hack/crosscheck-synthetic.sh
+      - name: A real call on loopback
+        run: sudo env "PATH=$PATH" RQ="$PWD/rtp-quality" hack/annotate.sh bash hack/real-call.sh
+      - name: The same call through netem (15 ms +/- 10 ms, 8 % loss)
+        run: sudo env "PATH=$PATH" RQ="$PWD/rtp-quality" NETEM=1 hack/annotate.sh bash hack/real-call.sh

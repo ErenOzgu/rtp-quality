@@ -1,0 +1,6 @@
+/rtp-quality
+/dist/
+*.test
+*.pcap
+*.pcapng
+!internal/**/testdata/*.pcap

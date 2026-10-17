@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-labelledby="t d">
+  <title id="t">rtp-quality</title>
+  <desc id="d">Jitter, packet loss and estimated MOS from a pcap or pcapng capture of RTP, as text, JSON or Prometheus. Checked against Wireshark and a real SIPp call.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1117"/>
+      <stop offset="1" stop-color="#1b2230"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2dd4bf" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#2dd4bf" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#ffffff" stroke-opacity="0.035"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="420" fill="url(#bg)"/>
+  <rect width="1280" height="420" fill="url(#grid)"/>
+  <rect width="640" height="420" fill="url(#glow)"/>
+  <g transform="translate(0 0)">
+  <g font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif">
+    <text x="64" y="128" font-size="13" letter-spacing="3" fill="#2dd4bf" font-weight="600">VOIP  ·  RTP  ·  MOS</text>
+    <text x="62" y="196" font-size="58" font-weight="700" fill="#f0f6fc">rtp-quality</text>
+    <text x="64" y="244" font-size="22" fill="#9aa7b8">Jitter, loss and MOS from a packet capture,</text>
+    <text x="64" y="274" font-size="22" fill="#9aa7b8">checked against Wireshark and a real call.</text>
+    <g font-size="14" font-weight="600" fill="#d0d7de">
+      <rect x="64" y="304" width="151" height="34" rx="17" fill="#ffffff" fill-opacity="0.07" stroke="#ffffff" stroke-opacity="0.14"/><text x="139" y="326" text-anchor="middle">0 dependencies</text>
+      <rect x="227" y="304" width="143" height="34" rx="17" fill="#ffffff" fill-opacity="0.07" stroke="#ffffff" stroke-opacity="0.14"/><text x="298" y="326" text-anchor="middle">pcap + pcapng</text>
+      <rect x="382" y="304" width="176" height="34" rx="17" fill="#ffffff" fill-opacity="0.07" stroke="#ffffff" stroke-opacity="0.14"/><text x="470" y="326" text-anchor="middle">Prometheus output</text>
+    </g>
+  </g>
+  <g transform="translate(700 56)">
+    <rect width="516" height="308" rx="12" fill="#0b0f14" stroke="#ffffff" stroke-opacity="0.12"/>
+    <rect width="516" height="38" rx="12" fill="#ffffff" fill-opacity="0.05"/>
+    <circle cx="22" cy="19" r="6" fill="#f85149" fill-opacity="0.85"/>
+    <circle cx="42" cy="19" r="6" fill="#d29922" fill-opacity="0.85"/>
+    <circle cx="62" cy="19" r="6" fill="#3fb950" fill-opacity="0.85"/>
+    <text x="258" y="24" text-anchor="middle" font-family="'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="12" fill="#8b949e">rtp-quality -fail-mos 4.0 call.pcap</text>
+    <g font-family="SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace" font-size="13" fill="#8b949e">
+      <text x="22" y="76" xml:space="preserve"><tspan fill="#8b949e">Stream 2  </tspan><tspan fill="#e6edf3">192.0.2.10:10000 -&gt; 192.0.2.20:20000</tspan></text>
+      <text x="22" y="102" xml:space="preserve"><tspan fill="#8b949e">  codec     </tspan><tspan fill="#e6edf3">PCMU, 8000 Hz, ptime 20 ms</tspan></text>
+      <text x="22" y="128" xml:space="preserve"><tspan fill="#8b949e">  packets   </tspan><tspan fill="#e6edf3">1426 of 1500 expected</tspan></text>
+      <text x="22" y="154" xml:space="preserve"><tspan fill="#8b949e">  loss      </tspan><tspan fill="#ff7b72">4.93 %</tspan><tspan fill="#8b949e">  (74 lost, longest burst 18)</tspan></text>
+      <text x="22" y="180" xml:space="preserve"><tspan fill="#8b949e">  jitter    </tspan><tspan fill="#e6edf3">mean 8.80 ms, max 13.61 ms</tspan></text>
+      <text x="22" y="206" xml:space="preserve"><tspan fill="#8b949e">  quality   </tspan><tspan fill="#d29922">MOS 3.75</tspan><tspan fill="#8b949e">  R 73.4 (some users dissatisfied)</tspan></text>
+      <text x="22" y="232" xml:space="preserve"><tspan fill="#e6edf3"></tspan></text>
+      <text x="22" y="258" xml:space="preserve"><tspan fill="#8b949e">rtp-quality: </tspan><tspan fill="#ff7b72">FAIL</tspan><tspan fill="#e6edf3"> MOS 3.75 is below 4.00</tspan></text>
+      <text x="22" y="284" xml:space="preserve"><tspan fill="#8b949e">exit status 1</tspan></text>
+    </g>
+  </g>
+  </g>
+</svg>

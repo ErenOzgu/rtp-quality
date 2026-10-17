@@ -1,0 +1,66 @@
+# HELP rtp_streams RTP streams reported from the capture.
+# TYPE rtp_streams gauge
+rtp_streams 2
+# HELP rtp_capture_non_rtp_datagrams UDP datagrams in the capture that were not RTP.
+# TYPE rtp_capture_non_rtp_datagrams gauge
+rtp_capture_non_rtp_datagrams 0
+# HELP rtp_stream_packets Distinct RTP packets received.
+# TYPE rtp_stream_packets gauge
+rtp_stream_packets{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 1464
+rtp_stream_packets{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 1450
+# HELP rtp_stream_expected_packets RTP packets expected from the sequence numbers.
+# TYPE rtp_stream_expected_packets gauge
+rtp_stream_expected_packets{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 1500
+rtp_stream_expected_packets{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 1500
+# HELP rtp_stream_lost_packets RTP packets that never arrived.
+# TYPE rtp_stream_lost_packets gauge
+rtp_stream_lost_packets{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 36
+rtp_stream_lost_packets{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 50
+# HELP rtp_stream_duplicate_packets RTP packets received more than once.
+# TYPE rtp_stream_duplicate_packets gauge
+rtp_stream_duplicate_packets{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 11
+rtp_stream_duplicate_packets{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 13
+# HELP rtp_stream_reordered_packets RTP packets that arrived after a higher sequence number.
+# TYPE rtp_stream_reordered_packets gauge
+rtp_stream_reordered_packets{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 56
+rtp_stream_reordered_packets{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 52
+# HELP rtp_stream_late_packets RTP packets that arrived too late for the assumed jitter buffer.
+# TYPE rtp_stream_late_packets gauge
+rtp_stream_late_packets{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 0
+rtp_stream_late_packets{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 0
+# HELP rtp_stream_loss_ratio Fraction of expected packets lost on the wire (0 to 1).
+# TYPE rtp_stream_loss_ratio gauge
+rtp_stream_loss_ratio{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 0.024
+rtp_stream_loss_ratio{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 0.0333333333
+# HELP rtp_stream_effective_loss_ratio Fraction of expected packets lost or too late to play (0 to 1).
+# TYPE rtp_stream_effective_loss_ratio gauge
+rtp_stream_effective_loss_ratio{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 0.024
+rtp_stream_effective_loss_ratio{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 0.0333333333
+# HELP rtp_stream_max_loss_burst_packets Longest run of consecutive lost or late packets.
+# TYPE rtp_stream_max_loss_burst_packets gauge
+rtp_stream_max_loss_burst_packets{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 4
+rtp_stream_max_loss_burst_packets{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 6
+# HELP rtp_stream_jitter_seconds Mean interarrival jitter (RFC 3550).
+# TYPE rtp_stream_jitter_seconds gauge
+rtp_stream_jitter_seconds{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 0.0090723364
+rtp_stream_jitter_seconds{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 0.00920184907
+# HELP rtp_stream_jitter_max_seconds Highest interarrival jitter value reached (RFC 3550).
+# TYPE rtp_stream_jitter_max_seconds gauge
+rtp_stream_jitter_max_seconds{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 0.0164752047
+rtp_stream_jitter_max_seconds{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 0.0141383372
+# HELP rtp_stream_duration_seconds Time from the first to the last packet.
+# TYPE rtp_stream_duration_seconds gauge
+rtp_stream_duration_seconds{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 29.974851
+rtp_stream_duration_seconds{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 29.964148
+# HELP rtp_stream_bitrate_bits_per_second RTP payload bit rate.
+# TYPE rtp_stream_bitrate_bits_per_second gauge
+rtp_stream_bitrate_bits_per_second{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 62100.0585
+rtp_stream_bitrate_bits_per_second{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 61940.6899
+# HELP rtp_stream_r_factor E-model transmission rating factor R (only for codecs with published parameters).
+# TYPE rtp_stream_r_factor gauge
+rtp_stream_r_factor{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 82.5979908
+rtp_stream_r_factor{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 79.163186
+# HELP rtp_stream_mos Estimated mean opinion score from the E-model (only for codecs with published parameters).
+# TYPE rtp_stream_mos gauge
+rtp_stream_mos{src="192.0.2.10:10000",dst="192.0.2.20:20000",ssrc="0x11111111",segment="1",codec="PCMU"} 4.11830155
+rtp_stream_mos{src="192.0.2.20:20000",dst="192.0.2.10:10000",ssrc="0x22222222",segment="1",codec="PCMU"} 3.99198039
