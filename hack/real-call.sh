@@ -42,17 +42,26 @@ if [ "$NETEM" = 1 ]; then
   tc qdisc show dev lo
 fi
 
+# SIPp 3.7 takes a media port range, 3.6 (Ubuntu 22.04) a single port; both end up inside the
+# 16 ports the netem filter and check_call.py expect.
+sipp_help="$(sipp -h 2>&1 || true)"
+if grep -q -- '-min_rtp_port' <<<"$sipp_help"; then
+  rtp_ports() { echo "-min_rtp_port $1 -max_rtp_port $(($1 + 15))"; }
+else
+  rtp_ports() { echo "-mp $1"; }
+fi
+
 capture="$work/call-capture.pcap"
 tcpdump -i lo -U -n -w "$capture" udp 2>"$work/tcpdump.log" &
 tcpdump_pid=$!
 for _ in $(seq 50); do [ "$(stat -c %s "$capture" 2>/dev/null || echo 0)" -ge 24 ] && break; sleep 0.1; done
 
-sipp -sf "$here/uas_echo.xml" -i 127.0.0.1 -p "$UAS_SIP" -min_rtp_port "$UAS_RTP" -max_rtp_port "$((UAS_RTP + 15))" -rtp_echo -m 1 -nostdin \
+sipp -sf "$here/uas_echo.xml" -i 127.0.0.1 -p "$UAS_SIP" $(rtp_ports "$UAS_RTP") -rtp_echo -m 1 -nostdin \
   -trace_err -error_file "$work/uas_err.log" >"$work/uas.log" 2>&1 &
 uas_pid=$!
 sleep 1
 
-(cd "$work" && sipp -sf "$here/uac_audio.xml" -s 2000 -i 127.0.0.1 -p "$UAC_SIP" -min_rtp_port "$UAC_RTP" -max_rtp_port "$((UAC_RTP + 15))" -m 1 -nostdin \
+(cd "$work" && sipp -sf "$here/uac_audio.xml" -s 2000 -i 127.0.0.1 -p "$UAC_SIP" $(rtp_ports "$UAC_RTP") -m 1 -nostdin \
   -timeout 60 -timeout_error -trace_err -error_file "$work/uac_err.log" "127.0.0.1:$UAS_SIP") >"$work/uac.log" 2>&1 \
   || { echo "SIPp caller failed"; tail -30 "$work/uac.log"; cat "$work"/uac_err.log 2>/dev/null; exit 1; }
 wait "$uas_pid" || { echo "SIPp callee failed"; tail -30 "$work/uas.log"; exit 1; }
